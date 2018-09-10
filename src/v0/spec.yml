@@ -1,0 +1,212 @@
+# A library of functions for interacting with the pins on an RPi3
+#
+# Copyright 2018 Andrew Lucas
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+# express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+swagger: "2.0"
+info:
+  title: A Pi API (.py)
+  version: v0.1.0
+  description: |
+    A simple API to provide a REST interface to the pins of a Raspberry
+    Pi.
+consumes:
+  - application/json
+produces:
+  - application/json
+
+basePath: /v0
+
+# TODO Security
+# TODO Test scripts
+
+paths:
+  /status:
+    get:
+      summary: Get the status of the server
+      operationId: v0.util.status
+      tags:
+        - get
+        - util
+      responses:
+        200:
+          description: |
+            Responds with `OK`, to show that the server is running
+          schema:
+            required:
+              - status
+            properties:
+              status:
+                type: string
+                enum: [OK]
+  /pins:
+    get:
+      summary: Get the state of all pins
+      operationId: v0.pins.get
+      tags:
+        - get
+        - bulk
+        - pins
+      responses:
+        200:
+          description: |
+            * `.mode` is `HIGH`, `LOW` or `IN` to indicate how the pin
+              is configured
+            * `.value` is `HIGH` or `LOW` to indictate the voltage on
+              the pin
+          schema:
+            type: array
+            items:
+              required:
+                - id
+                - mode
+                - value
+              properties:
+                id:
+                  type: string
+                mode:
+                  type: string
+                  enum: [HIGH, LOW, IN]
+                value:
+                  type: string
+                  enum: [HIGH, LOW]
+    patch:
+      summary: Update the state of listed pins
+      operationId: v0.pins.patch
+      tags:
+        - patch
+        - bulk
+        - pins
+      parameters:
+        - name: pins
+          description: |
+            * `.mode` may be `HIGH` (to emit 3.3v), `LOW`
+              (to emit ground), or `IN` (to read).
+            * `.value` is allowed but ignored; which permits a common
+              set of properties with `GET`
+          in: body
+          schema:
+            type: array
+            items:
+              type: object
+              example:
+                id: "37"
+                mode: HIGH
+              required:
+                - id
+                - mode
+              properties:
+                id:
+                  type: string
+                mode:
+                  type: string
+                  enum: [HIGH, LOW, IN]
+                value:
+                  type: string
+                  enum: [HIGH, LOW]
+      responses:
+        200:
+          description: |
+            Successfully updated the pins
+  /pins/{id}:
+    put:
+      summary: Set the state of a pin
+      operationId: v0.pin.put
+      tags:
+        - put
+        - id
+        - pins
+      parameters:
+        - name: id
+          description: |
+            Hardware id of the pin according to `GPIO.BOARD`
+          in: path
+          type: string
+          required: true
+        - name: pin
+          description: |
+            * `.mode` may be `HIGH` (to emit 3.3v), `LOW`
+              (to emit ground), or `IN` (to read).
+            * `.value` is allowed but ignored; which permits a common
+              set of properties with `GET`
+          in: body
+          schema:
+            type: object
+            example:
+              mode: HIGH
+            required:
+              - mode
+            properties:
+              id:
+                type: string
+              mode:
+                type: string
+                enum: [HIGH, LOW, IN]
+              value:
+                type: string
+                enum: [HIGH, LOW]
+      responses:
+        200:
+          description: |
+            Responds with the state of the pin, so that
+            putting a pin to `IN` immediately reads the `.value`
+          schema:
+            required:
+              - id
+              - mode
+              - value
+            properties:
+              id:
+                type: string
+              mode:
+                type: string
+                enum: [HIGH, LOW, IN]
+              value:
+                type: string
+                enum: [HIGH, LOW]
+    get:
+      summary: Get the state of a pin
+      operationId: v0.pin.get
+      tags:
+        - get
+        - id
+        - pins
+      parameters:
+        - name: id
+          description: |
+            Hardware id of the pin according to `GPIO.BOARD`
+          in: path
+          type: string
+          required: true
+      responses:
+        200:
+          description: |
+            * `.mode` is `HIGH`, `LOW` or `IN` to indicate how the pin
+              is configured
+            * `.value` is `HIGH` or `LOW` to indictate the voltage on
+              the pin
+          schema:
+            required:
+              - mode
+              - value
+            properties:
+              id:
+                type: string
+              mode:
+                type: string
+                enum: [HIGH, LOW, IN]
+              value:
+                type: string
+                enum: [HIGH, LOW]

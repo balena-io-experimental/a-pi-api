@@ -1,0 +1,5 @@
+# IDE Files
+*.iml
+.idea
+.vscode
+.notes
