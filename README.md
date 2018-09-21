@@ -2,6 +2,8 @@
 
 A simple API to provide a REST interface to the pins of a Raspberry Pi.
 
+![a simple breadboard](apiapi.jpg)
+
 ## Getting Started
 
 1) The first few steps of this are covered by the [resin.io getting started guide](https://docs.resin.io/learn/getting-started/raspberrypi3/python/), tweaked very slightly.
