@@ -1,6 +1,6 @@
 # A library of functions for interacting with the pins on an RPi3
 #
-# Copyright 2018 Andrew Lucas
+# Copyright 2018 resin.io
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -26,11 +26,7 @@ consumes:
   - application/json
 produces:
   - application/json
-
 basePath: /v0
-
-# TODO Security
-# TODO Test scripts
 
 paths:
   /status:
@@ -59,6 +55,12 @@ paths:
         - get
         - bulk
         - pins
+      parameters:
+        - name: Authorization
+          description: |
+            Shared secret to authorize the request
+          in: header
+          type: string
       responses:
         200:
           description: |
@@ -116,6 +118,11 @@ paths:
                 value:
                   type: string
                   enum: [HIGH, LOW]
+        - name: Authorization
+          description: |
+            Shared secret to authorize the request
+          in: header
+          type: string
       responses:
         200:
           description: |
@@ -157,6 +164,11 @@ paths:
               value:
                 type: string
                 enum: [HIGH, LOW]
+        - name: Authorization
+          description: |
+            Shared secret to authorize the request
+          in: header
+          type: string
       responses:
         200:
           description: |
@@ -190,6 +202,11 @@ paths:
           in: path
           type: string
           required: true
+        - name: Authorization
+          description: |
+            Shared secret to authorize the request
+          in: header
+          type: string
       responses:
         200:
           description: |

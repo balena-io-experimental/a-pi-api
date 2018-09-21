@@ -3,7 +3,7 @@ A library of functions for interacting with the pins on an RPi3.
 The documentation for each function resides in spec.yml, the swagger
 spec
 
-Copyright 2018 Andrew Lucas
+Copyright 2018 resin.io
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@ limitations under the License.
 """
 
 
-import connexion
 import RPi.GPIO as GPIO
 from . import pin
 GPIO.setmode(GPIO.BOARD)
